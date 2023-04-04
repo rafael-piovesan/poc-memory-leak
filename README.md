@@ -45,7 +45,7 @@ Statistics        Avg      Stdev        Max
 ![image](images/02_new_code.png)
 
 ### Scenario 03: refactoring to use a factory
-First variation of the fix to test the hipothesis where the problem might be related to fact the we're creating multiple instances of a Class marked with the `@injectable()` decorator.
+First variation of the fix to test the hypothesis where the problem might be related to fact the we're creating multiple instances of a Class marked with the `@injectable()` decorator.
 
 ```log
 bombardier -c 10 -d 5m -t 5s --http1 http://localhost:3000/3
@@ -64,7 +64,7 @@ Statistics        Avg      Stdev        Max
 ![image](images/03_factory.png)
 
 ### Scenario 04: refactoring to avoid spawning multiple child objects
-Second variation of the fix to test the hipothesis where the problem might be related to fact the we're creating multiple instances of `ApiService` class while passing along references to the same original object.
+Second variation of the fix to test the hypothesis where the problem might be related to fact the we're creating multiple instances of `ApiService` class while passing along references to the same original object.
 
 
 ```log
