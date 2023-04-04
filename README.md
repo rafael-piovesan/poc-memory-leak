@@ -1,4 +1,12 @@
-## original code
+### Setup
+The tests described bellow were executed using [bombardier](https://github.com/codesenberg/bombardier) (a HTTP load generating tool). Other alternatives could be:
+- [autocannon](https://github.com/mcollina/autocannon)
+- [vegeta](https://github.com/tsenart/vegeta)
+- [Apache ab](https://httpd.apache.org/docs/2.4/programs/ab.html)
+
+Also, the tests expect a local HTTP server to be running at `http://localhost:3030/hello`, which should return any arbitrary JSON payload (this was done just to simulate better what happens in production). Here's a simple [mock api server implementation](https://github.com/rafael-piovesan/node-mock-server) that could be used.
+
+### Scenario 01: original code
 Replicates the original scenario which has led to the CPU issue in production.
 
 ```log
@@ -17,7 +25,7 @@ Statistics        Avg      Stdev        Max
 
 ![image](images/01_original_code.png)
 
-## new code
+### Scenario 02: new code
 Applies the same solution that has fixed the CPU problem in production.
 
 ```log
@@ -36,7 +44,7 @@ Statistics        Avg      Stdev        Max
 
 ![image](images/02_new_code.png)
 
-## refactoring to use a factory
+### Scenario 03: refactoring to use a factory
 First variation of the fix to test the hipothesis where the problem might be related to fact the we're creating multiple instances of a Class marked with the `@injectable()` decorator.
 
 ```log
@@ -55,7 +63,7 @@ Statistics        Avg      Stdev        Max
 
 ![image](images/03_factory.png)
 
-## refactoring to avoid spawning multiple child objects
+### Scenario 04: refactoring to avoid spawning multiple child objects
 Second variation of the fix to test the hipothesis where the problem might be related to fact the we're creating multiple instances of `ApiService` class while passing along references to the same original object.
 
 
