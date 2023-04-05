@@ -4,10 +4,30 @@ The tests described bellow were executed using [bombardier](https://github.com/c
 - [vegeta](https://github.com/tsenart/vegeta)
 - [Apache ab](https://httpd.apache.org/docs/2.4/programs/ab.html)
 
-Also, the tests expect a local HTTP server to be running at `http://localhost:3030/hello`, which should return any arbitrary JSON payload (this was done just to simulate better what happens in production). Here's a simple [mock api server implementation](https://github.com/rafael-piovesan/node-mock-server) that could be used.
+Also, the tests expect a local HTTP server to be running at `http://localhost:3030/hello`, which should return any arbitrary JSON payload (this was done just to simulate better what happens under real word traffic). Here's a simple [mock api server implementation](https://github.com/rafael-piovesan/node-mock-server) that could be used.
+
+### Running the tests
+Build the project
+```sh
+nest build
+```
+
+Run node script with the flag `inspect`
+```sh
+node --inspect dist/main
+```
+
+Open Chrome web browser and navigate to `chrome://inspect`. Then find under "Remote Target" your running node instance and click "inspect". On the new window, go to "Memory", select "Allocation instrumentation on timeline" and click "Start".
+
+Start the load test:
+```sh
+bombardier -c 10 -d 5m -t 5s --http1 http://localhost:3000/1
+```
+
+Wait until the test ends and then stop the recording back at the Chrome window. A new heap memory profile should have been created which can now be inspected. Following are the most relevant results obtained after run the tests for each scenario.
 
 ### Scenario 01: original code
-Replicates the original scenario which has led to the CPU issue in production.
+Replicates the original scenario which has led to the CPU issue.
 
 ```log
 bombardier -c 10 -d 5m -t 5s --http1 http://localhost:3000/1
@@ -26,7 +46,7 @@ Statistics        Avg      Stdev        Max
 ![image](images/01_original_code.png)
 
 ### Scenario 02: new code
-Applies the same solution that has fixed the CPU problem in production.
+Applies the same solution that has fixed the CPU problem.
 
 ```log
 bombardier -c 10 -d 5m -t 5s --http1 http://localhost:3000/2
